@@ -1,0 +1,49 @@
+// Redux
+
+How Redux Works (Step-by-Step):
+Store → Holds the global state of your app in one place.
+
+Slice → A logical section of the state (e.g. workout), containing initial data and logic.
+
+Reducer → A function that updates the state based on actions.
+
+Action → A signal that tells Redux what to do (e.g. "add workout").
+
+Dispatch → You use dispatch(action) to send an action to Redux.
+
+Selector → You use useSelector() to read data from the Redux state in a component.
+
+Provider → You wrap your app in a Provider so all components can access Redux.
+
+🔁 Simple Flow:
+Component → dispatch(action) → Reducer updates store → UI gets new data via useSelector()
+
+
+// date
+
+✅ toLocaleDateString()
+const date1 = new Date();
+const dateOptions = { day: "2-digit", month: "short", year: "numeric" };
+
+console.log(date1.toLocaleDateString("en-GB", dateOptions)); // "19 Jun 2025"
+console.log(date1.toLocaleDateString("hi-IN"));              // "19/6/2025"
+
+// ✅ toLocaleTimeString()
+const date2 = new Date();
+const timeOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+
+console.log(date2.toLocaleTimeString("en-US", timeOptions)); // "03:30:25 PM"
+console.log(date2.toLocaleTimeString("hi-IN"));              // "15:30:25"
+
+// ✅ toLocaleString()
+const date3 = new Date();
+const fullOptions = {
+  weekday: "short",
+  year: "numeric",
+  month: "short",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit"
+};
+
+console.log(date3.toLocaleString("en-GB", fullOptions)); // "Thu, 19 Jun 2025 at 15:30"
