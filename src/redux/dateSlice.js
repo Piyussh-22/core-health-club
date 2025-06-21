@@ -6,13 +6,13 @@ const dateSlice = createSlice({
     selectedDate: new Date().toISOString(),
   },
   reducers: {
-    setDate: (state, action) => {
+    setSelectedDate: (state, action) => {
       state.selectedDate = action.payload;
     },
   },
 });
 
-export const { setDate } = dateSlice.actions;
+export const { setSelectedDate } = dateSlice.actions;
 export default dateSlice.reducer;
 
 /*Notes

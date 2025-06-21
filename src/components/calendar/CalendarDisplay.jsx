@@ -1,42 +1,62 @@
-import { useSelector, useDispatch } from "react-redux";
-import { setDate } from "@/redux/dateSlice";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedDate } from "@/redux/dateSlice";
 
 const CalendarDisplay = () => {
-  const [showCalendar, setShowCalendar] = useState(false);
-  const selectedDate = useSelector((state) => state.date.selectedDate);
   const dispatch = useDispatch();
+  const selectedDate = useSelector((state) => state.date.selectedDate);
 
-  const dateToShow = new Date(selectedDate).toLocaleDateString("en-GB", {
+  const [isMobile, setIsMobile] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  const handleDateClick = () => {
+    if (isMobile) {
+      setShowCalendar((prev) => !prev);
+    }
+  };
+
+  const handleDateChange = (date) => {
+    dispatch(setSelectedDate(date.toISOString()));
+    if (isMobile) setShowCalendar(false);
+  };
+
+  const formattedDate = new Date(selectedDate).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
 
-  const handelDateClicked = () => {
-    setShowCalendar((prev) => !prev);
-  };
-
   return (
-    <div className="flex flex-col">
-      <button
-        className="px-4 py-2 rounded-full bg-primary text-background font-medium shadow-md cursor-pointer"
-        onClick={handelDateClicked}
-      >
-        {dateToShow}
-      </button>
-      {showCalendar && (
-        <div className="mt-2 rounded-xl border bg-background p-4 shadow-lg">
-          <Calendar
-            mode="single"
-            selected={new Date(selectedDate)}
-            onSelect={(date) => {
-              if (date) dispatch(setDate(date.toISOString()));
-            }}
-          />
+    <div className="w-full flex flex-col items-center justify-center gap-2">
+      <div className="w-[250px]">
+        <div
+          onClick={handleDateClick}
+          className="bg-muted text-sm font-medium px-4 py-2 rounded-md shadow cursor-pointer text-center"
+        >
+          {formattedDate}
         </div>
-      )}
+        {(!isMobile || showCalendar) && (
+          <div className="mt-2">
+            <Calendar
+              mode="single"
+              selected={new Date(selectedDate)}
+              onSelect={handleDateChange}
+              className="border-none shadow-none"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
